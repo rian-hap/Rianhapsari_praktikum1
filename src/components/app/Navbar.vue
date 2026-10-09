@@ -21,6 +21,7 @@ const menus = [
     ],
   },
   { name: 'Contact', path: '/contact' },
+  { name: 'Organizer Dashboard', path: '/dashboard' }, // <-- Menu baru ditambahkan di sini
 ]
 
 const handleScroll = () => {
@@ -177,7 +178,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-/* NAVBAR FULL-WIDTH menyatu dengan bagian atas layar */
 .navbar {
   width: 100%;
   background: var(--nav-bg, #1c1948);
@@ -250,7 +250,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   height: 100%;
-  padding: 1rem 0; /* Memberi ruang hover */
+  padding: 1.0rem 0;
 }
 
 .nav-link {
@@ -290,16 +290,12 @@ onUnmounted(() => {
   transform: rotate(180deg);
 }
 
-/* ==================================
-DROPDOWN & SUBMENU STYLES
-Inspired by user reference image
-================================== */
 .dropdown-menu {
-  display: none; /* diubah jadi block saat hover */
+  display: none;
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: #d8d8d8; /* warna abu seperti referensi */
+  background-color: #d8d8d8;
   min-width: 200px;
   list-style: none;
   padding: 0;
@@ -308,14 +304,13 @@ Inspired by user reference image
   border-radius: 4px;
 }
 
-/* Tampilkan dropdown level 1 saat nav-item di-hover */
 .nav-item:hover .dropdown-menu {
   display: block;
   animation: fadeIn 0.2s ease-out;
 }
 
 .dropdown-item {
-  position: relative; /* relative untuk submenu absolut */
+  position: relative;
 }
 
 .dropdown-link {
@@ -324,25 +319,21 @@ Inspired by user reference image
   align-items: center;
   padding: 12px 20px;
   text-decoration: none;
-  color: #333; /* text gelap */
+  color: #333;
   font-size: 0.95rem;
-  transition:
-    background-color 0.2s,
-    color 0.2s;
+  transition: background-color 0.2s, color 0.2s;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .dropdown-link:hover {
-  background-color: #c4c4c4; /* efek hover lebih gelap sedikit */
+  background-color: #c4c4c4;
   color: #000;
 }
 
-/* Hilangkan border bawah pada item terakhir */
 .dropdown-item:last-child .dropdown-link {
   border-bottom: none;
 }
 
-/* Submenu (Level 2) */
 .submenu {
   display: none;
   position: absolute;
@@ -357,7 +348,6 @@ Inspired by user reference image
   border-radius: 4px;
 }
 
-/* Tampilkan submenu level 2 saat dropdown-item di-hover */
 .dropdown-item:hover .submenu {
   display: block;
   animation: fadeIn 0.2s ease-out;
@@ -374,13 +364,6 @@ Inspired by user reference image
   }
 }
 
-/* Submenu pada parent (jika left:100% terlalu mentok layar)
-Kita bisa membiarkannya default left 100%.
-*/
-
-/* ==================================
-RIGHT SECTION
-================================== */
 .nav-right {
   display: flex;
   align-items: center;
@@ -442,7 +425,6 @@ RIGHT SECTION
   .nav-menu {
     display: none;
   }
-
   .lang-selector {
     display: none;
   }
