@@ -1,3 +1,8 @@
+<script setup>
+import AppButton from '@/components/ui/AppButton.vue';
+import AppCard from '@/components/ui/AppCard.vue';
+</script>
+
 <template>
   <div class="event-detail-page">
     <button @click="$router.push('/browse/events')" class="btn-back">&larr; Back to Events</button>
@@ -6,9 +11,9 @@
       <span class="event-tag">Workshop & Training</span>
       <h1>Vue.js Mastery Workshop {{ $route.params.id }}</h1>
       <div class="meta-info">
-        <span class="meta-item">📅 October 12, 2026</span>
-        <span class="meta-item">📍 Tech Hub, Jakarta Pusat</span>
-        <span class="meta-item">👥 Quota: 150 Attendees</span>
+        <span class="meta-item">October 12, 2026</span>
+        <span class="meta-item">Tech Hub, Jakarta Pusat</span>
+        <span class="meta-item">Quota: 150 Attendees</span>
       </div>
     </div>
 
@@ -16,16 +21,16 @@
       <div class="main-desc">
         <h2>About This Event</h2>
         <p>
-          Welcome to the biggest web interface development training event of the year!
-          Gatherly is collaborating with the local developer community to host a comprehensive workshop
+          Welcome to the biggest web interface development training event of the year! 
+          Gatherly is collaborating with the local developer community to host a comprehensive workshop 
           designed specifically to bring together professionals, enthusiasts, and students.
         </p>
         <p>
-          In this session, we will discuss various current industry challenges, dissect the implementation
-          of Single Page Applications (SPA), and practice hands-on Layout System design prioritizing visual hierarchy.
+          In this session, we will discuss various current industry challenges, dissect the implementation 
+          of Single Page Applications (SPA), and practice hands-on Layout System design prioritizing visual hierarchy. 
           You will gain practical insights that can be directly applied to your future projects or career.
         </p>
-
+        
         <h2>Event Agenda</h2>
         <ul class="agenda-list">
           <li><strong>09:00 AM</strong> - Registration & QR Check-in Scanning</li>
@@ -37,13 +42,15 @@
       </div>
 
       <div class="sidebar">
-        <div class="ticket-card sticky-pane">
+        <AppCard class="ticket-card sticky-pane">
           <h3>Attendee Registration</h3>
-          <p class="price">Free</p>
           <p class="ticket-desc">Secure your seat now before the quota is full.</p>
-          <button class="btn-register">Register Now</button>
+          <p class="price">Free</p>
+          <AppButton variant="primary" class="btn-register">
+            Register Now
+          </AppButton>
           <p class="spots">Only 12 seats left!</p>
-        </div>
+        </AppCard>
       </div>
     </div>
   </div>
@@ -57,9 +64,6 @@
   cursor: pointer;
   margin-bottom: var(--space-6);
   color: var(--text-muted);
-}
-.btn-back:hover {
-  color: var(--primary);
 }
 
 .detail-header {
@@ -83,14 +87,12 @@
 
 .detail-header h1 {
   font-size: 2.8rem;
-  color: var(--text-main);
   margin-bottom: var(--space-4);
   line-height: 1.2;
 }
 
 .meta-info {
   display: flex;
-  flex-wrap: wrap;
   gap: var(--space-6);
 }
 
@@ -108,7 +110,6 @@
 
 .main-desc h2 {
   margin-bottom: var(--space-4);
-  color: var(--text-main);
   font-size: 1.8rem;
   border-left: 4px solid var(--primary);
   padding-left: var(--space-2);
@@ -124,7 +125,7 @@
 .agenda-list {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 0 var(--space-8) 0;
 }
 
 .agenda-list li {
@@ -135,11 +136,7 @@
 }
 
 .ticket-card {
-  background: white;
   padding: var(--space-8);
-  border-radius: var(--space-4);
-  border: 1px solid var(--border-color);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
   text-align: center;
 }
 
@@ -149,13 +146,12 @@
 }
 
 .ticket-card h3 {
-  color: var(--text-main);
   font-size: 1.5rem;
   margin-bottom: var(--space-2);
 }
 
 .price {
-  font-size: 2.8rem;
+  font-size: 2.5rem;
   font-weight: 800;
   color: var(--primary);
   margin-bottom: var(--space-2);
@@ -168,19 +164,6 @@
 
 .btn-register {
   width: 100%;
-  padding: var(--space-4);
-  background: var(--primary);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.btn-register:hover {
-  background: var(--primary-hover);
 }
 
 .spots {
