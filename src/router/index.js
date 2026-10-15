@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AppLayout from '@/layouts/App.vue'
+import DashboardLayout from '@/layouts/DashboardLayout.vue'
 
 const routes = [
   {
@@ -12,14 +13,12 @@ const routes = [
         component: () => import('@/views/HomeView.vue'),
         meta: { breadcrumb: 'Home' }
       },
-
       {
         path: 'about',
         name: 'about',
         component: () => import('@/views/AboutView.vue'),
         meta: { breadcrumb: 'About' }
       },
-
       {
         path: 'browse',
         name: 'browse',
@@ -33,14 +32,12 @@ const routes = [
             component: () => import('@/views/EventList.vue'),
             meta: { breadcrumb: 'Event List' }
           },
-
           {
             path: 'events/:id',
             name: 'event-detail',
             component: () => import('@/views/EventDetail.vue'),
             meta: { breadcrumb: 'Event Detail' }
           },
-
           {
             path: 'category',
             name: 'category',
@@ -49,26 +46,28 @@ const routes = [
           }
         ]
       },
-
       {
         path: 'contact',
         name: 'contact',
         component: () => import('@/views/Contact.vue'),
         meta: { breadcrumb: 'Contact' }
-      },
-
+      }
+    ]
+  },
+  {
+    /* AREA PENYELENGGARA ACARA (DASHBOARD) */
+    path: '/dashboard',
+    component: DashboardLayout,
+    children: [
       {
-        path: 'dashboard',
-        component: () => import('@/layouts/DashboardLayout.vue'),
-        meta: { breadcrumb: 'Organizer Dashboard' },
-        children: [
-          {
-            path: '',
-            name: 'dashboard',
-            component: () => import('@/views/Dashboard.vue'),
-            meta: { breadcrumb: 'Dashboard' }
-          }
-        ]
+        path: '',
+        name: 'dashboard-overview',
+        component: () => import('@/views/Dashboard.vue')
+      },
+      {
+        path: 'events',
+        name: 'dashboard-events',
+        component: () => import('@/views/EventManagement.vue')
       }
     ]
   }
