@@ -1,3 +1,4 @@
+*,
 *::before,
 *::after {
   box-sizing: border-box;
@@ -10,6 +11,7 @@
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
+  --space-5: 20px;
   --space-6: 24px;
   --space-8: 32px;
   --space-12: 48px;
@@ -33,7 +35,8 @@ body {
   overflow-x: hidden;
 }
 
-/* GLOBAL GRID SYSTEM */
+/* GLOBAL GRID SYSTEM
+   Menerapkan 12-kolom grid untuk tata letak yang konsisten */
 .grid-12 {
   display: grid;
   grid-template-columns: repeat(12, 1fr);

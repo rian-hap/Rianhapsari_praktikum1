@@ -1,130 +1,146 @@
 <script setup>
+import { useRouter } from 'vue-router';
 import AppButton from '@/components/ui/AppButton.vue';
-import AppCard from '@/components/ui/AppCard.vue';
+
+const router = useRouter();
 </script>
 
 <template>
   <div class="home-page">
     <section class="hero-section">
       <div class="hero-content">
-        <h1 class="hero-title">Connect, Discover, and Experience</h1>
-        <p class="hero-subtitle">
-          A community event platform designed to bring ideas together. Discover hundreds of events near you.
+        <span class="hero-badge">WELCOME TO GATHERLY</span>
+        <h1 class="hero-title">Discover & Manage Amazing Events Together</h1>
+        <p class="hero-description">
+          Gatherly adalah platform serba ada untuk menemukan workshop, seminar, meetup, dan kompetisi terbaik. Daftar acara favoritmu atau kelola acaramu sendiri dengan mudah.
         </p>
-        <div class="hero-action">
-          <AppButton variant="primary" @click="$router.push('/browse/events')">
-            Discover Events
+        <div class="hero-actions">
+          <AppButton variant="primary" @click="router.push('/browse/events')">
+            Explore Events &rarr;
+          </AppButton>
+          <AppButton variant="secondary" @click="router.push('/dashboard')">
+            Organizer Dashboard
           </AppButton>
         </div>
       </div>
     </section>
 
     <section class="features-section">
-      <div class="features-header">
-        <h2>Why Choose Gatherly?</h2>
-        <p>Everything you need to host or attend unforgettable events.</p>
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>Cari & Temukan</h3>
+        <p>Jelajahi berbagai kategori acara menarik dan amankan kuota kepersertaanmu secara langsung.</p>
       </div>
-      <div class="features-grid">
-        <AppCard class="feature-card">
-          <div class="feature-icon">✨</div>
-          <h3>Discover Easily</h3>
-          <p>Find events tailored to your interests using our smart category and location filters.</p>
-        </AppCard>
-        <AppCard class="feature-card">
-          <div class="feature-icon">🎟️</div>
-          <h3>Seamless Ticketing</h3>
-          <p>Register with one click and get your digital QR ticket instantly on your device.</p>
-        </AppCard>
-        <AppCard class="feature-card">
-          <div class="feature-icon">🚀</div>
-          <h3>Host Like a Pro</h3>
-          <p>Manage attendees, track revenue, and scan QR codes with our comprehensive dashboard.</p>
-        </AppCard>
+
+      <div class="feature-card">
+        <div class="feature-icon">🎟️</div>
+        <h3>Tiket Digital</h3>
+        <p>Akses tanda terima dan tiket digital resmi kapan saja melalui menu riwayat acara kamu.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Manajemen Panitia</h3>
+        <p>Buat acara baru, pantau kuota pendaftar, dan kelola status publikasi acara dengan cepat.</p>
       </div>
     </section>
   </div>
 </template>
 
 <style scoped>
+.home-page {
+  padding-bottom: var(--space-12, 48px);
+}
+
 .hero-section {
-  min-height: 65vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: var(--bg-light, #fdfdfd);
+  border: 1px solid var(--border-color, #e4e4e7);
+  border-radius: var(--space-4, 16px);
+  padding: var(--space-12, 48px) var(--space-8, 32px);
   text-align: center;
-  background: var(--bg-light);
-  border-radius: var(--space-6);
-  border: 1px solid var(--border-color);
-  padding: var(--space-12) var(--space-6);
-  margin-bottom: var(--space-12);
+  margin-bottom: var(--space-12, 48px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
 .hero-content {
-  max-width: 800px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(102, 68, 255, 0.1);
+  color: var(--primary, #6644ff);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 6px 16px;
+  border-radius: 50px;
+  margin-bottom: var(--space-4, 16px);
 }
 
 .hero-title {
-  font-size: 4rem;
-  font-weight: 800;
-  color: var(--text-main);
-  line-height: 1.1;
-  margin-bottom: var(--space-6);
+  font-size: 2.5rem;
+  color: var(--text-main, #1c1948);
+  margin-bottom: var(--space-4, 16px);
+  line-height: 1.25;
 }
 
-.hero-subtitle {
-  font-size: 1.25rem;
-  color: var(--text-muted);
-  margin-bottom: var(--space-8);
-  max-width: 600px;
+.hero-description {
+  font-size: 1.1rem;
+  color: var(--text-muted, #666666);
+  line-height: 1.6;
+  margin-bottom: var(--space-8, 32px);
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-4, 16px);
+  flex-wrap: wrap;
 }
 
 .features-section {
-  padding: 0 var(--space-12) 0;
-}
-
-.features-header {
-  text-align: center;
-  margin-bottom: var(--space-8);
-}
-
-.features-header h2 {
-  font-size: 2.2rem;
-  color: var(--text-main);
-  margin-bottom: var(--space-2);
-}
-
-.features-header p {
-  color: var(--text-muted);
-  font-size: 1.1rem;
-}
-
-.features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-8);
+  gap: var(--space-6, 24px);
 }
 
 .feature-card {
-  padding: var(--space-8);
+  background: white;
+  border: 1px solid var(--border-color, #e4e4e7);
+  border-radius: var(--space-4, 16px);
+  padding: var(--space-6, 24px);
   text-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
 .feature-icon {
-  font-size: 3rem;
-  margin-bottom: var(--space-4);
+  font-size: 2.5rem;
+  margin-bottom: var(--space-3, 12px);
 }
 
 .feature-card h3 {
-  font-size: 1.3rem;
-  color: var(--text-main);
-  margin-bottom: var(--space-2);
+  font-size: 1.25rem;
+  color: var(--text-main, #1c1948);
+  margin-bottom: var(--space-2, 8px);
 }
 
 .feature-card p {
-  color: var(--text-muted);
-  line-height: 1.6;
+  font-size: 0.95rem;
+  color: var(--text-muted, #666666);
+  line-height: 1.5;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 1.8rem;
+  }
 }
 </style>

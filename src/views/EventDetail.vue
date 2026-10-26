@@ -7,10 +7,15 @@ import AppCard from '@/components/ui/AppCard.vue';
 
 const route = useRoute();
 const router = useRouter();
-const { getEventById } = useEvents();
+const { getEventById, isUserRegistered } = useEvents();
 
 // MENGAMBIL DATA EVENT DINAMIS DARI STATE BERDASARKAN ID DI URL
 const event = computed(() => getEventById(route.params.id));
+
+// CEK APAKAH PENGGUNA SUDAH TERDAFTAR DI EVENT INI
+const isRegistered = computed(() => {
+  return event.value ? isUserRegistered(event.value.id) : false;
+});
 </script>
 
 <template>
@@ -25,23 +30,22 @@ const event = computed(() => getEventById(route.params.id));
         <div class="header-tags">
           <span class="event-tag">{{ event.cat }}</span>
           <span v-if="event.done" class="status-tag status-ended">Event Finished</span>
+          <span v-else-if="isRegistered" class="status-tag status-registered">Registered</span>
+          <span v-else-if="event.quota <= 0" class="status-tag status-soldout">Sold Out</span>
           <span v-else class="status-tag status-live">Open Registration</span>
         </div>
-
         <h1>{{ event.title }}</h1>
-
         <div class="meta-info">
-          <span class="meta-item">&#128197; {{ event.date }}</span>
-          <span class="meta-item">&#128205; {{ event.loc }}</span>
-          <span class="meta-item">&#128101; Quota: {{ event.quota }} Attendees</span>
+          <span class="meta-item"><strong>Date:</strong> {{ event.date }}</span>
+          <span class="meta-item"><strong>Location:</strong> {{ event.loc }}</span>
+          <span class="meta-item"><strong>Remaining Quota:</strong> {{ event.quota }} Attendees</span>
         </div>
       </div>
 
       <!-- ASYMMETRICAL LAYOUT -->
       <div class="detail-content grid-asymmetric">
-        
-        <!-- FOCAL POINT: Breaking text with Headings & Paragraphs -->
         <div class="main-desc">
+          <!-- F-PATTERN: Breaking text with Headings & Paragraphs -->
           <h2>About This Event</h2>
           <p class="description-text">
             {{ event.desc }}
@@ -51,42 +55,78 @@ const event = computed(() => getEventById(route.params.id));
         <!-- FOCAL POINT & STICKY PANE -->
         <div class="sidebar">
           <AppCard class="ticket-card sticky-pane">
-            <h3>Attendee Registration</h3>
-            <p class="price">{{ event.price }}</p>
-            <p class="ticket-desc">
-              {{ event.done ? 'Registration is closed as this event has ended.' : 'Secure your ticket now before quota is filled.' }}
+            <h3>Event Registration</h3>
+            <p v-if="event.done" class="ticket-desc">
+              Registration is closed as this event has concluded.
+            </p>
+            <p v-else-if="isRegistered" class="ticket-desc text-success">
+              You are registered for this event. Your booking is confirmed.
+            </p>
+            <p v-else-if="event.quota <= 0" class="ticket-desc text-warning">
+              All seats for this event are currently full.
+            </p>
+            <p v-else class="ticket-desc">
+              Secure your spot now before the remaining quota is filled.
             </p>
 
-            <!-- BUTTON FOCAL POINT -->
-            <div v-if="!event.done">
+            <!-- BUTTON FOCAL POINT DENGAN HIERARKI STATUS -->
+            <div class="action-buttons">
+              <!-- STATUS 1: SUDAH SELESAI -->
               <AppButton
-                variant="primary"
-                class="btn-register"
-                @click="alert('Ticket registered successfully! Your digital QR ticket has been sent to your email.')"
-              >
-                Register Now
-              </AppButton>
-              <p class="spots">&#128293; Only {{ event.quota }} seats available!</p>
-            </div>
-
-            <div v-else>
-              <AppButton
+                v-if="event.done"
                 variant="secondary"
                 class="btn-register btn-disabled"
                 disabled
               >
                 Registration Closed
               </AppButton>
+
+              <!-- STATUS 2: SUDAH TERDAFTAR -->
+              <div v-else-if="isRegistered" class="registered-action-group">
+                <AppButton
+                  variant="secondary"
+                  class="btn-register btn-registered"
+                  disabled
+                >
+                  Already Registered
+                </AppButton>
+                <router-link :to="'/browse/your-events/' + event.id" class="view-receipt-link">
+                  View Your Ticket Receipt &rarr;
+                </router-link>
+              </div>
+
+              <!-- STATUS 3: KUOTA HABIS -->
+              <AppButton
+                v-else-if="event.quota <= 0"
+                variant="secondary"
+                class="btn-register btn-disabled"
+                disabled
+              >
+                Sold Out
+              </AppButton>
+
+              <!-- STATUS 4: TERSEDIA (NORMAL) -->
+              <AppButton
+                v-else
+                variant="primary"
+                class="btn-register"
+                @click="router.push(`/browse/events/${event.id}/register`)"
+              >
+                Register Now
+              </AppButton>
             </div>
+
+            <p v-if="!event.done && !isRegistered && event.quota > 0" class="spots">
+              {{ event.quota }} seats available
+            </p>
           </AppCard>
         </div>
-
       </div>
     </div>
 
     <!-- EMPTY STATE IF ID NOT FOUND -->
     <div v-else class="not-found-card">
-      <h2>404 - Event Not Found</h2>
+      <h2>404 Event Not Found</h2>
       <p>The event you are looking for is unavailable or has been removed by the organizer.</p>
       <AppButton variant="primary" @click="router.push('/browse/events')">
         Back to Event Catalog
@@ -106,7 +146,9 @@ const event = computed(() => getEventById(route.params.id));
   font-weight: 500;
 }
 
-.btn-back:hover { color: var(--primary); }
+.btn-back:hover {
+  color: var(--primary);
+}
 
 .detail-header {
   background: var(--bg-light);
@@ -121,6 +163,7 @@ const event = computed(() => getEventById(route.params.id));
   gap: var(--space-3);
   align-items: center;
   margin-bottom: var(--space-4);
+  flex-wrap: wrap;
 }
 
 .event-tag {
@@ -128,8 +171,8 @@ const event = computed(() => getEventById(route.params.id));
   color: var(--primary);
   padding: var(--space-1) var(--space-4);
   border-radius: 50px;
-  font-size: 0.85rem;
   font-weight: 600;
+  font-size: 0.9rem;
   text-transform: uppercase;
 }
 
@@ -143,6 +186,16 @@ const event = computed(() => getEventById(route.params.id));
 .status-live {
   background: rgba(46, 204, 113, 0.15);
   color: #27ae60;
+}
+
+.status-registered {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-soldout {
+  background: #fee2e2;
+  color: #b91c1c;
 }
 
 .status-ended {
@@ -165,8 +218,12 @@ const event = computed(() => getEventById(route.params.id));
 
 .meta-item {
   color: var(--text-muted);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 1.05rem;
+}
+
+.meta-item strong {
+  color: var(--text-main);
 }
 
 /* ASYMMETRICAL GRID */
@@ -203,22 +260,26 @@ const event = computed(() => getEventById(route.params.id));
 }
 
 .ticket-card h3 {
-  font-size: 1.5rem;
-  margin-bottom: var(--space-2);
+  font-size: 1.4rem;
+  margin-bottom: var(--space-3);
+  color: var(--text-main);
 }
 
-.ticket-card .price {
-  font-size: 2.8rem;
-  font-weight: 800;
-  color: var(--primary);
-  margin-bottom: var(--space-6);
-  line-height: 1.5;
-}
-
-.ticket-card .ticket-desc {
+.ticket-desc {
   color: var(--text-muted);
   margin-bottom: var(--space-6);
   line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.ticket-desc.text-success {
+  color: #15803d;
+  font-weight: 500;
+}
+
+.ticket-desc.text-warning {
+  color: #b91c1c;
+  font-weight: 500;
 }
 
 .btn-register {
@@ -227,7 +288,35 @@ const event = computed(() => getEventById(route.params.id));
 
 .btn-disabled {
   cursor: not-allowed;
-  opacity: 0.6;
+  opacity: 0.65;
+}
+
+.btn-registered {
+  cursor: default;
+  background: #f1f5f9;
+  color: #1e293b;
+  border: 1px solid var(--border-color);
+  opacity: 1;
+}
+
+.registered-action-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.view-receipt-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary);
+  text-decoration: none;
+  display: inline-block;
+  transition: color 0.25s;
+}
+
+.view-receipt-link:hover {
+  text-decoration: underline;
 }
 
 .spots {
@@ -255,6 +344,8 @@ const event = computed(() => getEventById(route.params.id));
 }
 
 @media (max-width: 900px) {
-  .grid-asymmetric { grid-template-columns: 1fr; }
+  .grid-asymmetric {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
